@@ -6,7 +6,7 @@ require 'eu_central_bank'
 require 'money/bank/open_exchange_rates_bank'
 require 'caxlsx'
 
-Selenium::WebDriver::Chrome::Service.driver_path = "C:/chromedriver.exe"
+Selenium::WebDriver::Chrome::Service.driver_path = ENV['PARSER_SELENIUM_PATH']
 options = Selenium::WebDriver::Chrome::Options.new
 options.add_argument('--ignore-certificate-errors')
 options.add_argument('--disable-popup-blocking')
@@ -43,7 +43,7 @@ prices_belarus_global = Array.new
 prices_ukraine_global = Array.new
 
 oxr = Money::Bank::OpenExchangeRatesBank.new(Money::RatesStore::Memory.new)
-oxr.app_id = 'f2ad01ea0b01477ea0aee43b49725074'
+oxr.app_id = ENV['PARSER_APP_ID']
 oxr.update_rates
 Money.default_bank = oxr
 Money.locale_backend = nil
