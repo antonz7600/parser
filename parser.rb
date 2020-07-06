@@ -19,11 +19,6 @@ browser_russia = Selenium::WebDriver.for :chrome, options: options
 browser_belarus = Selenium::WebDriver.for :chrome, options: options
 browser_ukraine = Selenium::WebDriver.for :chrome, options: options
 
-# url_russia = 'https://www.e-katalog.ru/prices/lg-24mk430h/'
-# url_belarus = 'https://catalog.onliner.by/display/lg/24mk430hb/prices?town_id=17030'
-# url_ukraine = 'https://ek.ua/prices/lg-24mk430h/'
-# LG 24MK430H-B
-
 url_russia = 'https://www.e-katalog.ru'
 url_belarus = 'https://catalog.onliner.by'
 url_ukraine = 'https://ek.ua'
@@ -32,21 +27,22 @@ browser_russia.get(url_russia)
 browser_belarus.get(url_belarus)
 browser_ukraine.get(url_ukraine)
 
-browser_russia.find_element(:xpath, '//*[@id="ek-search"]').send_keys(value)
-browser_belarus.find_element(:xpath, '/html/body/div[1]/div/div/div/header/div[3]/div/div[2]/div[1]/form/input[1]').send_keys(value)
-browser_ukraine.find_element(:xpath, '//*[@id="ek-search"]').send_keys(value)
+begin
+  browser_russia.find_element(:xpath, '//*[@id="ek-search"]').send_keys(value)
+  browser_belarus.find_element(:xpath, '/html/body/div[1]/div/div/div/header/div[3]/div/div[2]/div[1]/form/input[1]').send_keys(value)
+  browser_ukraine.find_element(:xpath, '//*[@id="ek-search"]').send_keys(value)
+rescue
+  abort("Failed to connect to sites, try again...")
+end
 
-puts browser_russia.current_url
-puts browser_belarus.current_url
-puts browser_ukraine.current_url
-
-browser_russia.find_element(:xpath, '//div[5]/div/a/span').click
-puts browser_russia.current_url
-browser_belarus.switch_to.frame browser_belarus.find_element(:xpath, '/html/body/div[3]/div/div/iframe')
-browser_belarus.find_element(:xpath, '/html/body/div[1]/div[2]/ul/li[1]/div/div/div[1]/div/a').click
-puts browser_belarus.current_url
-browser_ukraine.find_element(:xpath, '//div[5]/div/a/span').click
-puts browser_ukraine.current_url
+begin
+  browser_russia.find_element(:xpath, '//div[5]/div/a/span').click
+  browser_belarus.switch_to.frame browser_belarus.find_element(:xpath, '/html/body/div[3]/div/div/iframe')
+  browser_belarus.find_element(:xpath, '/html/body/div[1]/div[2]/ul/li[1]/div/div/div[1]/div/a').click
+  browser_ukraine.find_element(:xpath, '//div[5]/div/a/span').click
+rescue
+  abort("Failed to find items, please, try again...")
+end
 
 
 browser_russia.get(browser_russia.current_url)
