@@ -5,50 +5,30 @@ require 'money'
 require 'eu_central_bank'
 require 'money/bank/open_exchange_rates_bank'
 require 'caxlsx'
+require_relative 'helpers/browser.rb'
+require_relative 'helpers/search.rb'
 
-value = gets
+search_item = gets
 
 Selenium::WebDriver::Chrome::Service.driver_path = ENV['PARSER_SELENIUM_PATH']
-options = Selenium::WebDriver::Chrome::Options.new
-options.add_argument('--ignore-certificate-errors')
-options.add_argument('--disable-popup-blocking')
-options.add_argument('--disable-translate')
-options.add_argument('--headless')
-options.add_argument('log-level=3')
-browser_russia = Selenium::WebDriver.for :chrome, options: options
-browser_belarus = Selenium::WebDriver.for :chrome, options: options
-browser_ukraine = Selenium::WebDriver.for :chrome, options: options
 
-url_russia = 'https://www.e-katalog.ru'
-url_belarus = 'https://catalog.onliner.by'
-url_ukraine = 'https://ek.ua'
+browser_russia = get_browser
+browser_belarus = get_browser
+browser_ukraine = get_browser
 
-browser_russia.get(url_russia)
-browser_belarus.get(url_belarus)
-browser_ukraine.get(url_ukraine)
+URL_RUSSIA = 'https://www.e-katalog.ru'
+URL_BELARUS = 'https://catalog.onliner.by'
+URL_UKRAINE = 'https://ek.ua'
 
-begin
-  browser_russia.find_element(:xpath, '//*[@id="ek-search"]').send_keys(value)
-  browser_belarus.find_element(:xpath, '/html/body/div[1]/div/div/div/header/div[3]/div/div[2]/div[1]/form/input[1]').send_keys(value)
-  browser_ukraine.find_element(:xpath, '//*[@id="ek-search"]').send_keys(value)
-rescue
-  abort("Failed to connect to sites, try again...")
-end
+browser_russia.get(URL_RUSSIA)
+browser_belarus.get(URL_BELARUS)
+browser_ukraine.get(URL_UKRAINE)
 
-begin
-  browser_russia.find_element(:xpath, '//div[5]/div/a/span').click
-  browser_belarus.switch_to.frame browser_belarus.find_element(:xpath, '/html/body/div[3]/div/div/iframe')
-  browser_belarus.find_element(:xpath, '/html/body/div[1]/div[2]/ul/li[1]/div/div/div[1]/div/a').click
-  browser_ukraine.find_element(:xpath, '//div[5]/div/a/span').click
-rescue
-  abort("Failed to find items, please, try again...")
-end
+russia_good, belarus_good, ukraine_good = get_page(browser_russia, browser_belarus, browser_ukraine, search_item)
 
-
-browser_russia.get(browser_russia.current_url)
-browser_belarus.get(browser_belarus.current_url)
-browser_ukraine.get(browser_ukraine.current_url)
-
+browser_russia.get(russia_good)
+browser_belarus.get(belarus_good)
+browser_ukraine.get(ukraine_good)
 
 prices_local_russia = browser_russia.find_elements(:xpath, '//*[@id="item-wherebuy-table"]/tbody/tr/td[3]/a')
 shops_russia = browser_russia.find_elements(:xpath, '//td[4]/a/img')
