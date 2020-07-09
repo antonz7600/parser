@@ -19,5 +19,13 @@ It is simple - you can get in 1 minute all deals from CIS. pick featured, add pr
 How much time you write this code?
 Just a few days
 
+I want some screens))
+No problem: all results are stored at prices.xlsx
+FE: prices of Samsung Galaxy S20
+https://pasteboard.co/JgUvE3G.png
+FE: prices of LG 24' display
+https://pasteboard.co/JgUwnLR.png
+
+
 I found a bug, what should I do?
 I'll be very happy, if you give me favor, and send info to a.zavaliuk@gmail.com
