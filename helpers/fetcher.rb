@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'selenium-webdriver'
 require 'money'
 require 'eu_central_bank'
@@ -8,8 +10,10 @@ SHOPS_RU_UA = '//td[4]/a/img'
 COLOR_PRICE_RU_UA = '//*[@id="item-wherebuy-table"]/tbody/tr/td[4]/a'
 COLOR_SHOPS_RU_UA = '//td[5]/a/img'
 
-PRICE_BY = '/html/body/div[1]/div/div/div/div/div/div[2]/div[1]/main/div/div/div[2]/div[2]/div[2]/div/div[2]/table/tbody/tr/td[1]/p/a/span'
-SHOPS_BY = '/html/body/div[1]/div/div/div/div/div/div[2]/div[1]/main/div/div/div[2]/div[2]/div[2]/div/div[2]/table/tbody/tr/td[4]/div[1]/a[1]/img'
+PRICE_BY = '/html/body/div[1]/div/div/div/div/div/div[2]/div[1]/
+            main/div/div/div[2]/div[2]/div[2]/div/div[2]/table/tbody/tr/td[1]/p/a/span'
+SHOPS_BY = '/html/body/div[1]/div/div/div/div/div/div[2]/div[1]/
+            main/div/div/div[2]/div[2]/div[2]/div/div[2]/table/tbody/tr/td[4]/div[1]/a[1]/img'
 
 def update_rates(oxr)
   oxr.update_rates
@@ -22,8 +26,8 @@ def fetch_russia_ukraine(browser, currency)
     prices_local = browser.find_elements(:xpath, COLOR_PRICE_RU_UA)
     shops = browser.find_elements(:xpath, COLOR_SHOPS_RU_UA)
   end
-  shops.map! { |shop| shop.attribute("alt") }
-  prices_global = Array.new
+  shops.map! { |shop| shop.attribute('alt') }
+  prices_global = []
 
   rate = Money.default_bank.get_rate(currency, 'BYN').to_f
   prices_local.each do |price_local|
@@ -40,11 +44,11 @@ end
 def fetch_belarus(browser_belarus)
   prices_local_belarus = browser_belarus.find_elements(:xpath, PRICE_BY)
   shops_belarus = browser_belarus.find_elements(:xpath, SHOPS_BY)
-  shops_belarus.map! { |shop| shop.attribute("alt") }
-  prices_belarus_global = Array.new
+  shops_belarus.map! { |shop| shop.attribute('alt') }
+  prices_belarus_global = []
 
   prices_local_belarus.each do |price_local|
-    price_value = price_local.text.match(/[0-9 ,]+/).to_s.delete(' ').gsub!(',','.').to_f
+    price_value = price_local.text.match(/[0-9 ,]+/).to_s.delete(' ').gsub!(',', '.').to_f
     prices_belarus_global.append(price_value)
   end
   puts(shops_belarus)

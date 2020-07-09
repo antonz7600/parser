@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'selenium-webdriver'
 
 RU_UA_PAGE = '//*[@id="ek-search"]'
@@ -12,8 +14,8 @@ def get_page(browser_russia, browser_belarus, browser_ukraine, value)
     browser_russia.find_element(:xpath, RU_UA_PAGE).send_keys(value)
     browser_belarus.find_element(:xpath, BY_PAGE).send_keys(' ' + value)
     browser_ukraine.find_element(:xpath, RU_UA_PAGE).send_keys(value)
-  rescue
-    abort("Failed to connect to sites, try again...")
+  rescue StandardError
+    abort('Failed to connect to sites, try again...')
   end
   get_price_list(browser_russia, browser_belarus, browser_ukraine)
 end
@@ -23,22 +25,22 @@ def get_price_list(browser_russia, browser_belarus, browser_ukraine)
   begin
     begin
       browser_russia.find_element(:xpath, RU_UA_PRICE).click
-    rescue
+    rescue StandardError
       browser_russia.find_element(:xpath, RU_UA_PICK).click
       sleep(2)
       browser_russia.find_element(:xpath, RU_UA_PRICE).click
     end
     begin
       browser_ukraine.find_element(:xpath, RU_UA_PRICE).click
-    rescue
+    rescue StandardError
       browser_ukraine.find_element(:xpath, RU_UA_PICK).click
       sleep(2)
       browser_ukraine.find_element(:xpath, RU_UA_PRICE).click
     end
     browser_belarus.switch_to.frame browser_belarus.find_element(:xpath, BY_FRAME)
     browser_belarus.find_element(:xpath, BY_PRICE).click
-  rescue
-    abort("Failed to find items, please, try again...")
+  rescue StandardError
+    abort('Failed to find items, please, try again...')
   end
   [browser_russia.current_url, browser_belarus.current_url, browser_ukraine.current_url]
 end

@@ -1,10 +1,9 @@
+# frozen_string_literal: true
+
 require 'nokogiri'
 require 'selenium-webdriver'
-require 'httparty'
 require 'money'
-require 'eu_central_bank'
 require 'money/bank/open_exchange_rates_bank'
-require 'caxlsx'
 require_relative 'helpers/browser.rb'
 require_relative 'helpers/search.rb'
 require_relative 'helpers/fetcher.rb'
@@ -46,9 +45,9 @@ browser_russia.close
 browser_belarus.close
 browser_ukraine.close
 
-country = ["RUS"] * shops_russia.length + ["UA"] * shops_ukraine.length + ["BLR"] * shops_belarus.length
+country = ['RUS'] * shops_russia.length + ['UA'] * shops_ukraine.length + ['BLR'] * shops_belarus.length
 local_prices = prices_local_russia + prices_local_ukraine
-prices = prices_russia_global +  prices_ukraine_global + prices_belarus_global
+prices = prices_russia_global + prices_ukraine_global + prices_belarus_global
 shops = shops_russia + shops_ukraine + shops_belarus
 
 export(country, shops, prices, local_prices, search_item)
